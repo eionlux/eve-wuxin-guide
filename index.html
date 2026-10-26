@@ -1,0 +1,416 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>EVE无烬星河·新手入门指南 - 维基百科风格</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 26 26'%3E%3Cpath d='M2 2h9v9H2zM15 2h9v9h-9zM2 15h9v9H2zM15 15h9v9h-9z' fill='%230645ad'/%3E%3C/svg%3E">
+<style>
+  :root{
+    --bg:#f6f6f6;
+    --surface:#ffffff;
+    --border:#a7a7a7;
+    --light-border:#c8ccd1;
+    --text:#202122;
+    --muted:#54595d;
+    --link:#0645ad;
+    --link-vis:#0b0080;
+    --red:#d33;
+    --sidebar-w:176px;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;line-height:1.6;font-size:15px}
+  a{color:var(--link);text-decoration:none}
+  a:hover{text-decoration:underline}
+  a:visited{color:var(--link-vis)}
+
+  .topbar{background:#fff;border-bottom:1px solid #c8ccd1;padding:8px 12px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+  .topbar .logo{display:flex;align-items:center;gap:6px;font-size:17px;font-weight:700;color:var(--text)}
+  .topbar .logo svg{display:block}
+  .topbar .search{margin-left:auto;display:flex;gap:6px}
+  .topbar .search input{border:1px solid #a2a9b1;border-radius:2px;padding:5px 10px;font-size:16px;min-width:220px}
+  .topbar .search button{border:1px solid #a2a9b1;background:#f8f9fa;border-radius:2px;padding:5px 12px;cursor:pointer;font-size:14px}
+  .topbar .search button:hover{background:#fff}
+
+  .tabs{background:#fff;border-bottom:1px solid #c8ccd1;padding:0 16px;display:flex;gap:2px;flex-wrap:wrap;font-size:13px}
+  .tabs a{padding:7px 10px;color:var(--muted);border-bottom:2px solid transparent}
+  .tabs a.active{color:var(--text);border-bottom-color:var(--text);font-weight:600}
+  .tabs .right{margin-left:auto;display:flex;gap:2px;flex-wrap:wrap}
+  .tabs .right a{color:#0645ad}
+
+  .layout{display:flex;max-width:1400px;margin:0 auto;align-items:flex-start}
+  .sidebar{width:var(--sidebar-w);flex-shrink:0;padding:14px 10px;font-size:12.5px}
+  .sidebar .sb-title{font-weight:700;font-size:13px;padding:6px 4px}
+  .sidebar a{display:block;padding:3px 4px;color:var(--muted);line-height:1.4}
+  .sidebar a:hover{color:var(--text);text-decoration:none;background:#eee}
+
+  .main{flex:1;background:var(--surface);border:1px solid var(--border);border-top:none;padding:20px 26px 40px;min-width:0}
+  .article-title{font-size:28px;font-family:"Noto Serif SC",Georgia,"Songti SC",serif;line-height:1.3;border-bottom:1px solid var(--light-border);padding-bottom:4px;margin:0 0 14px}
+  .subtitle{color:var(--muted);font-size:14px;margin:-8px 0 16px}
+
+  .infobox{float:right;clear:right;margin:0 0 16px 20px;width:280px;border:1px solid var(--light-border);background:#f8f9fa;font-size:13px;padding:0}
+  .infobox .ib-head{background:#eaf3ff;text-align:center;font-weight:700;font-size:14px;padding:6px;border-bottom:1px solid var(--light-border)}
+  .infobox img{width:100%;display:block;padding:6px;background:#fff}
+  .infobox table{width:100%;border-collapse:collapse}
+  .infobox td{padding:4px 8px;border-bottom:1px solid #eaecf0;vertical-align:top}
+  .infobox td.k{font-weight:700;width:40%;color:var(--muted)}
+
+  .toc{background:#f8f9fa;border:1px solid var(--light-border);max-width:340px;padding:10px 16px 10px 10px;font-size:14px;margin:6px 0 18px}
+  .toc b{display:block;text-align:center;margin-bottom:6px}
+  .toc ol{padding-left:20px;margin:0}
+  .toc li{margin:3px 0}
+  .toc a{color:var(--link)}
+
+  h2{font-family:"Noto Serif SC",Georgia,"Songti SC",serif;font-size:22px;border-bottom:1px solid var(--light-border);padding-bottom:4px;margin:30px 0 12px;font-weight:600}
+  h3{font-family:"Noto Serif SC",Georgia,"Songti SC",serif;font-size:18px;margin:22px 0 10px;font-weight:600}
+  p{margin:8px 0}
+  table.wikitable{border-collapse:collapse;margin:14px 0;font-size:14px;width:100%}
+  table.wikitable th,table.wikitable td{border:1px solid var(--light-border);padding:6px 10px;vertical-align:top;text-align:left}
+  table.wikitable th{background:#eaecf0;font-weight:700}
+  table.wikitable tr:nth-child(even) td{background:#f8f9fa}
+  ol.steps{counter-reset:step;padding-left:0;list-style:none}
+  ol.steps>li{counter-increment:step;margin:8px 0;padding-left:34px;position:relative}
+  ol.steps>li::before{content:counter(step);position:absolute;left:0;top:2px;width:24px;height:24px;background:#0645ad;color:#fff;border-radius:50%;text-align:center;line-height:24px;font-weight:700;font-size:13px}
+  ul{padding-left:24px}
+  ul>li{margin:4px 0}
+  .notice{border:1px solid #a2a9b1;background:#f8f9fa;padding:10px 14px;margin:14px 0;font-size:14px}
+  .notice.blue{border-left:4px solid #0645ad;background:#f4f8ff}
+  .notice.green{border-left:4px solid #14866d;background:#f3faf8}
+  .notice.yellow{border-left:4px solid #d4a017;background:#fdf9ee}
+  .notice.red{border-left:4px solid #d33;background:#fdf4f4}
+  .notice b.label{display:inline-block;font-weight:700}
+  .figure{margin:14px 0;text-align:center}
+  .figure img{max-width:100%;border:1px solid var(--light-border)}
+  .figure .cap{font-size:13px;color:var(--muted);margin-top:4px}
+
+  .refnote{font-size:12px;color:var(--muted)}
+  .sup{font-size:11px;vertical-align:super;color:var(--link)}
+  .stage-timeline{margin:16px 0}
+  .stage{position:relative;padding:12px 14px 12px 46px;border:1px solid var(--light-border);background:#fbfbfb;margin-bottom:14px}
+  .stage .num{position:absolute;left:10px;top:14px;width:26px;height:26px;border-radius:50%;background:#0645ad;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px}
+  .stage .name{font-weight:700;font-size:15px}
+  .stage .ship{color:#8a4b0f;font-weight:600;font-size:14px;margin:2px 0}
+  .stage ul{margin:4px 0 0;padding-left:20px}
+
+  .footer-legal{background:#f8f9fa;border:1px solid var(--light-border);border-top:none;font-size:12px;color:var(--muted);padding:14px 20px;max-width:1400px;margin:0 auto}
+
+  @media (max-width:900px){
+    .sidebar{display:none}
+    .infobox{float:none;width:100%;margin:0 0 16px}
+    .topbar .search input{min-width:150px}
+    .main{padding:14px 14px 30px}
+  }
+  @media (max-width:520px){
+    .article-title{font-size:22px}
+    table.wikitable{font-size:13px}
+    table.wikitable th,table.wikitable td{padding:4px 6px}
+  }
+</style>
+</head>
+<body>
+<!-- ===== 顶栏 ===== -->
+<div class="topbar">
+  <div class="logo">
+    <svg width="26" height="26" viewBox="0 0 26 26" aria-hidden="true"><path d="M2 2h9v9H2zM15 2h9v9h-9zM2 15h9v9H2zM15 15h9v9h-9z" fill="#0645ad"/></svg>
+    <span>EVE·自由百科</span>
+  </div>
+  <div class="search">
+    <input type="text" placeholder="搜索条目..." value="EVE无烬星河 新手指南">
+    <button onclick="document.querySelector('.toc')&&document.querySelector('.toc').scrollIntoView({behavior:'smooth'});return false;">搜索</button>
+  </div>
+</div>
+
+<!-- ===== 选项卡 ===== -->
+<div class="tabs">
+  <a href="#article" class="active">条目</a>
+  <a href="#article" onclick="toast('演示环境：讨论页未实现')">讨论</a>
+  <a href="#article" onclick="toast('演示环境：查看历史未实现')">查看历史</a>
+  <span class="right">
+    <a href="#article" onclick="toast('演示环境：编辑功能未实现')">编辑</a>
+    <a href="#article" onclick="toast('演示环境：编辑功能未实现')">编辑源代码</a>
+  </span>
+</div>
+
+<div class="layout">
+<!-- ===== 侧边栏 ===== -->
+<nav class="sidebar" aria-label="导航">
+  <div class="sb-title">导航</div>
+  <a href="#article">条目首页</a>
+  <a href="#overview">总述</a>
+  <a href="#route">成长路线</a>
+  <a href="#stage1">阶段一</a>
+  <a href="#stage2">阶段二</a>
+  <a href="#stage3">阶段三</a>
+  <a href="#stage4">阶段四</a>
+  <a href="#skill">技能与资源</a>
+  <a href="#earn">赚钱方式</a>
+  <a href="#survive">保命与避坑</a>
+  <a href="#finish">完成确认</a>
+</nav>
+
+<!-- ===== 正文 ===== -->
+<main class="main" id="article">
+  <h1 class="article-title" id="overview">EVE无烬星河 · 新手入门指南</h1>
+  <p class="subtitle">来源：自由百科，自由的百科全书（本页面由豆包整理，核验于2026年10月26日）</p>
+
+  <div class="infobox">
+    <div class="ib-head">EVE无烬星河</div>
+    <img src="https://media.doubao.com/space/api/box/stream/download/all_by_mount_point/BSAObIN2Lo1Le3xjdLzcUiemnSg" alt="渡鸦级驱逐舰">
+    <table>
+      <tr><td class="k">游戏原名</td><td>EVE Echoes</td></tr>
+      <tr><td class="k">开发商</td><td>网易</td></tr>
+      <tr><td class="k">发行</td><td>网易于中国大陆发行</td></tr>
+      <tr><td class="k">类型</td><td>大型多人在线（MMO）</td></tr>
+      <tr><td class="k">新手推荐族</td><td>加达里（C族）</td></tr>
+      <tr><td class="k">核心玩法</td><td>跃迁 · 导弹风筝 · 刷际遇</td></tr>
+      <tr><td class="k">核验时间</td><td>2026-10-26</td></tr>
+    </table>
+  </div>
+
+  <p><b>《EVE无烬星河》</b>（国际服名《EVE Echoes》）是由网易研发并发行的太空题材大型多人在线游戏（MMO），玩家以克隆飞行员的身份驾驶舰船，在高安、低安与00区域之间探索、战斗、制造与贸易。本条目为<b>零基础新手</b>提供从开局到中期的完整入门路线，目标是帮助玩家快速建立"先干什么、怎么打钱、怎么不浪费"的游玩框架。</p>
+
+  <div class="toc">
+    <b>目录</b>
+    <ol>
+      <li><a href="#overview">总述：新手该怎么玩</a></li>
+      <li><a href="#route">新手成长路线总览</a></li>
+      <li><a href="#first">第一件事：先做什么</a></li>
+      <li><a href="#stage1">阶段一：开局护卫期</a></li>
+      <li><a href="#stage2">阶段二：主力过渡期（渡鸦级）</a></li>
+      <li><a href="#stage3">阶段三：巡洋期</a></li>
+      <li><a href="#stage4">阶段四：中期方向</a></li>
+      <li><a href="#skill">技能与资源规划</a></li>
+      <li><a href="#survive">保命与常见坑</a></li>
+      <li><a href="#finish">完成确认与下一步</a></li>
+    </ol>
+  </div>
+
+  <div class="notice green">
+    <b class="label">本条目核心主线：</b>过教程 → 练技能 → 开过渡船打钱 → 攒钱升巡洋/毒蜥。全程优先<b>MK5白板便宜装备</b>，保船不炸，技能集中不分散。
+  </div>
+
+  <div class="notice blue">
+    <b class="label">先做什么：</b>做完全部职业任务（按F12，左下角共5个模块），这是真正的系统新手引导，教你熟悉际遇、异常、市场、制造等核心玩法。
+  </div>
+
+  <div class="notice red">
+    <b class="label">最重要的生存提醒：</b>EVE里你不会死，但船和装备会没。被<b>反跳怪</b>（跃迁干扰）锁住就跳不走，会被集火爆船——进任务先秒反跳怪，感觉危险直接跃迁跑，别硬扛。
+  </div>
+
+  <!-- ===== 成长路线 ===== -->
+  <h2 id="route">新手成长路线总览</h2>
+  <p>整个前期路线浓缩为4个阶段，每阶段对应主力船、当前目标和下一步动作。建议先看总览建立全局认知，再按分节逐步执行。</p>
+
+  <div class="stage-timeline">
+    <div class="stage">
+      <div class="num">1</div>
+      <div class="name">开局护卫期（约当天—3天）</div>
+      <div class="ship">主力：秃鹫级（加达里T2护卫，导弹船）</div>
+      <ul>
+        <li><b>核心任务：</b>过完新手教程 + 全部5个职业任务模块</li>
+        <li><b>技能：</b>先学驱逐舰操作到3级，为换船做准备</li>
+        <li><b>目标：</b>熟悉跃迁、锁定、导弹风筝，别急着打高难</li>
+      </ul>
+    </div>
+    <div class="stage">
+      <div class="num">2</div>
+      <div class="name">主力过渡期（约第1周）</div>
+      <div class="ship">主力：渡鸦级（加达里T4驱逐，新手最强过渡）</div>
+      <ul>
+        <li><b>配装：</b>MK5小型导弹×3 + 护盾 + 加力，全部白板便宜装</li>
+        <li><b>打钱：</b>3—4级际遇、0级深渊（白板渡鸦可通刷）</li>
+        <li><b>技能：</b>驱逐工程学、驱逐防御升级、锁定系统、护盾技能点起来</li>
+        <li><b>目标：</b>攒第一桶金，为巡洋准备技能点</li>
+      </ul>
+    </div>
+    <div class="stage">
+      <div class="num">3</div>
+      <div class="name">巡洋期（约第2—3周）</div>
+      <div class="ship">主力：狞獾级（C族导弹巡洋）→ 毒蜥级（新手毕业神船）</div>
+      <ul>
+        <li><b>狞獾：</b>巡洋过渡，盾抗导弹，熟悉巡洋手感</li>
+        <li><b>毒蜥：</b>新手毕业船，盾厚+无人机输出，可刷5级际遇/深渊</li>
+        <li><b>技能：</b>巡洋操作、中型武器、护盾增强技能是核心</li>
+        <li><b>目标：</b>稳定刷钱，开始考虑长期发展方向</li>
+      </ul>
+    </div>
+    <div class="stage">
+      <div class="num">4</div>
+      <div class="name">中期（约第1个月起）</div>
+      <div class="ship">主力：按发展路线选择战列/势力船</div>
+      <ul>
+        <li><b>战斗系：</b>乌鸦级/狂怒者级等战列，配合势力核心</li>
+        <li><b>建议：</b>前期集中点1—2条技能线，别平均分散</li>
+        <li><b>目标：</b>技能成型，稳定刷高安/低安收益内容</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ===== 第一件事 ===== -->
+  <h2 id="first">第一件事：先做什么</h2>
+  <p>很多新手做完开头教程就四处乱跑，其实<b>职业任务</b>才是系统引导你熟悉市场的真正入口。做职业任务能自然理解"际遇、异常、市场、制造"这些核心玩法，比看攻略更直观。</p>
+  <ol class="steps">
+    <li>做完新手短教程（教你开船、开炮）。</li>
+    <li>按下 F12，找到左下角<b>职业任务</b>，做完商业、工业、探索、军事、高级军事共5个模块——这才是真正的新手引导。</li>
+    <li>开始练技能，先学<b>驱逐舰操作到3级</b>（只需不到3小时），为开过渡船做准备。</li>
+  </ol>
+
+  <h3>第一艘船与核心循环</h3>
+  <p>游戏核心循环就一句话：<b>接任务/进异常 → 打海盗 → 掉战利品和赏金 → 换成钱 → 买更好装备/船 → 打更高级内容。</b></p>
+  <p>新手期节奏：先拿开局赠送的护卫舰（C族可选<b>秃鹫级</b>），用它刷1—2级际遇，熟悉导弹风筝的拉距打法，不用急着投入。</p>
+
+  <!-- ===== 阶段一 ===== -->
+  <h2 id="stage1">阶段一：开局护卫期（约当天—3天）</h2>
+  <p><b>主力船：秃鹫级</b>（加达里T2护卫，导弹船）。开局教学送的护卫就够用，别买花哨的。</p>
+  <table class="wikitable">
+    <colgroup><col style="width:18%"><col style="width:46%"><col style="width:36%"></colgroup>
+    <thead><tr><th>项目</th><th>做法</th><th>完成标准</th></tr></thead>
+    <tbody>
+      <tr><td><b>任务</b></td><td>过完开头教程 + 全部5个职业任务模块</td><td>界面里"职业任务"全部点亮/完成</td></tr>
+      <tr><td><b>技能</b></td><td>先学驱逐舰操作到3级，再补驱逐工程学、驱逐防御升级</td><td>技能队列持续训练，不空转</td></tr>
+      <tr><td><b>打钱</b></td><td>刷1—2级际遇，熟悉导弹风筝拉距</td><td>能稳定完成，不爆船</td></tr>
+      <tr><td><b>保命</b></td><td>上保险（选高级，T1船划算），记住爆船可用保险点恢复</td><td>了解保险机制，学会查看爆船后修复指引</td></tr>
+    </tbody>
+  </table>
+
+  <!-- ===== 阶段二 ===== -->
+  <h2 id="stage2">阶段二：主力过渡期（约第1周）</h2>
+  <p><b>主力船：渡鸦级</b>（加达里T4驱逐，新手最强过渡，通刷0级深渊）。这是你第一台真正的主力，教程四选一优先选它。</p>
+  <p><b>渡鸦级特点：</b>3高槽、2中槽、3低槽；导弹远程风筝，必中不吃角速度，对新手最友好；特有加成导弹/鱼雷飞行速度+25%，导弹飞得快、不易空。</p>
+
+  <div class="figure">
+    <img src="https://media.doubao.com/space/api/box/stream/download/all_by_mount_point/BSAObIN2Lo1Le3xjdLzcUiemnSg" alt="渡鸦级：加达里驱逐舰" width="420">
+    <div class="cap">渡鸦级：加达里驱逐舰，导弹船，新手过渡神船。</div>
+  </div>
+
+  <h3>渡鸦级推荐配装（全部MK5白板，便宜不怕炸）</h3>
+  <table class="wikitable">
+    <colgroup><col style="width:16%"><col style="width:38%"><col style="width:46%"></colgroup>
+    <thead><tr><th>槽位</th><th>装备</th><th>说明</th></tr></thead>
+    <tbody>
+      <tr><td><b>高槽×3</b></td><td>小型快速导弹发射器MK5（轻型导弹）</td><td>导弹必中，风筝核心；别用鱼雷（射程极近，扛不住贴脸）</td></tr>
+      <tr><td><b>中槽</b></td><td>小型掠能器MK5</td><td>吸怪的电维持电容，让盾修持续运转</td></tr>
+      <tr><td><b>低槽×3</b></td><td>小型护盾回充增量器MK5 + 小型加力燃烧器MK5 + 导弹制导计算机MK5</td><td>盾修保命、加力拉开距离、制导计算机加射程输出</td></tr>
+      <tr><td><b>无人机</b></td><td>轻型攻击无人机·大黄蜂MK5（一组）</td><td>高速小船贴脸时放出补伤害，打完收回来</td></tr>
+    </tbody>
+  </table>
+
+  <div class="notice yellow">
+    <b class="label">配装避坑：</b>不要上T2/势力装（3型皮米C等），贵且耗电，渡鸦电容扛不住；全部MK5白板即可。改装件（插槽）前期可空着，稳定不炸船再加盾插。
+  </div>
+
+  <div class="figure">
+    <img src="https://media.doubao.com/space/api/box/stream/download/all_by_mount_point/Imb7bpEtgoZc1NxQUZAcxkdenMh" alt="游戏内装配与属性界面" width="460">
+    <div class="cap">游戏内舰船装配与属性界面：可查看每秒伤害、导弹/无人机槽位、电容等。</div>
+  </div>
+
+  <h3>渡鸦风筝打法口诀</h3>
+  <ol class="steps">
+    <li>进际遇/异常，先锁定并优先击杀<b>速度最快的小船</b>（会贴脸的威胁最大）。</li>
+    <li>和目标保持<b>约20km环绕</b>，不要让怪近身。</li>
+    <li>掠能器：怪靠近到6km内再开吸电，离远没用。</li>
+    <li>护盾回充：<b>不要常驻</b>，盾掉到一半再开，回满立刻关，省电容。</li>
+    <li>加力：怪朝你冲、距离在缩短时开启，拉回18—22km后关掉省电。</li>
+  </ol>
+
+  <!-- ===== 阶段三 ===== -->
+  <h2 id="stage3">阶段三：巡洋期（约第2—3周）</h2>
+  <p>攒够钱和技能点后上巡洋。推荐顺序：<b>狞獾级 → 毒蜥级</b>。</p>
+  <table class="wikitable">
+    <colgroup><col style="width:20%"><col style="width:42%"><col style="width:38%"></colgroup>
+    <thead><tr><th>船</th><th>定位</th><th>适用内容</th></tr></thead>
+    <tbody>
+      <tr><td><b>狞獾级</b></td><td>C族导弹巡洋，盾抗远程，从驱逐到毒蜥的跳板</td><td>4级际遇、中型异常</td></tr>
+      <tr><td><b>毒蜥级</b></td><td>混血巡洋，新手毕业神船，盾厚+中型无人机输出</td><td>5级际遇、大部分深渊，长期刷钱主力</td></tr>
+    </tbody>
+  </table>
+  <p>毒蜥不需要堆太多导弹技能，靠无人机输出，盾量厚容错高，是被公认的新手毕业船，可以一直用到准备开战列。</p>
+
+  <!-- ===== 阶段四 ===== -->
+  <h2 id="stage4">阶段四：中期方向（约第1个月起）</h2>
+  <p>技能成型后选择长期发展方向：战斗系可走向乌鸦级/狂怒者级等战列，配合势力核心。建议<b>前期集中点1—2条技能线</b>，不要平均分散，否则什么都开不了。</p>
+
+  <!-- ===== 技能与资源 ===== -->
+  <h2 id="skill">技能与资源规划</h2>
+  <h3>技能怎么点</h3>
+  <table class="wikitable">
+    <colgroup><col style="width:24%"><col style="width:76%"></colgroup>
+    <thead><tr><th>阶段</th><th>优先技能</th></tr></thead>
+    <tbody>
+      <tr><td><b>开局</b></td><td>驱逐舰操作3级（不到3小时）→ 驱逐工程学、驱逐防御升级</td></tr>
+      <tr><td><b>巡洋准备</b></td><td>锁定系统5级、护盾维修/增强技能，为开巡洋储备</td></tr>
+      <tr><td><b>通用提醒</b></td><td>技能点到4级即可，5级花费是前4级总和的数倍，性价比低；前期别浪费技能点到5</td></tr>
+    </tbody>
+  </table>
+  <div class="notice blue">
+    <b class="label">关键认知：</b>技能靠时间堆出来，是EVE最核心的成长资源。技能队列时刻保持训练不空转，就是最好的"免费变强"。
+  </div>
+
+  <h3 id="earn">钱从哪里来（新手期赚钱方式）</h3>
+  <table class="wikitable">
+    <colgroup><col style="width:22%"><col style="width:42%"><col style="width:36%"></colgroup>
+    <thead><tr><th>方式</th><th>怎么做</th><th>适合阶段</th></tr></thead>
+    <tbody>
+      <tr><td><b>际遇任务</b></td><td>分"新闻"和"故事"两种，有入门/进阶/专家难度阶梯，做主线赚钱的主要方式</td><td>新手7级后主要来源</td></tr>
+      <tr><td><b>异常空间</b></td><td>进异常刷海盗，捡战利品和赏金</td><td>有战斗船后</td></tr>
+      <tr><td><b>深渊</b></td><td>0级深渊白板渡鸦可通刷，熟练后收益可观</td><td>渡鸦/巡洋期</td></tr>
+      <tr><td><b>偷行星材料</b></td><td>新手7级前几乎只能靠这个赚大钱，挂机采集行星材料出售</td><td>7级前</td></tr>
+      <tr><td><b>采矿/制造</b></td><td>挖矿、制造舰船装备出售；自制通常比买玩家出售的便宜</td><td>工业系玩家</td></tr>
+    </tbody>
+  </table>
+  <p class="refnote">新手提示：际遇按强度分海啸/海浪等，大约每20分钟刷一次机会，一小时收益约200—300万（含拾荒）。中前期稳定刷际遇是主线。</p>
+
+  <!-- ===== 保命与避坑 ===== -->
+  <h2 id="survive">保命与常见坑</h2>
+  <h3>爆船与保险</h3>
+  <p>EVE里你不会死，但船和装备会没。要点：</p>
+  <ul>
+    <li>船首次爆掉后，主界面右下角会弹出修复窗口，用<b>保险点</b>以30%价格恢复。</li>
+    <li>伊甸币和保险点兑换比例约1:7。</li>
+    <li>建议给主力船买较高等级的保险；T1船保险划算（赔得多花得少），T2/势力船保险不划算。</li>
+  </ul>
+
+  <h3>新手最常见的坑</h3>
+  <table class="wikitable">
+    <colgroup><col style="width:22%"><col style="width:42%"><col style="width:36%"></colgroup>
+    <thead><tr><th>错误</th><th>为什么有问题</th><th>正确做法</th></tr></thead>
+    <tbody>
+      <tr><td><b>上T2/势力装</b></td><td>贵、耗电高，炸一次血亏</td><td>过渡期全部MK5白板</td></tr>
+      <tr><td><b>技能平均分散</b></td><td>什么都开不了，成长慢</td><td>集中点1—2条技能线</td></tr>
+      <tr><td><b>硬扛高级内容</b></td><td>T5际遇/大型异常对驱逐是送死</td><td>渡鸦只打安稳T4，攒钱上巡洋</td></tr>
+      <tr><td><b>被反跳怪锁死</b></td><td>跳不走被集火爆船</td><td>优先秒反跳怪，感觉危险直接跃迁跑</td></tr>
+      <tr><td><b>技能点到5级</b></td><td>性价比极低，浪费大量技能点</td><td>前期点到4级即可</td></tr>
+      <tr><td><b>忽略职业任务</b></td><td>错过核心引导和系统理解</td><td>开局优先做完全部5个模块</td></tr>
+    </tbody>
+  </table>
+
+  <!-- ===== 完成确认 ===== -->
+  <h2 id="finish">完成确认与下一步</h2>
+  <div class="notice green">
+    <b class="label">达到什么状态算过关：</b>你能用渡鸦级稳定刷0级深渊和3—4级际遇不爆船，技能点已开始向巡洋倾斜，账户上有稳定收入——就可以攒钱上狞獾/毒蜥，进入中期。
+  </div>
+  <p><b>进入下一阶段的信号：</b>巡洋技能成型（巡洋操作+中型武器+护盾增强），已购入毒蜥级并配好MK5装，能通刷5级际遇。</p>
+  <p>之后可选择你的长期玩法：高安刷钱、加入军团参与团队活动、采矿制造，或向战列舰发展。</p>
+
+  <hr>
+  <h3>参考来源</h3>
+  <p class="refnote">本条目综合自以下公开资料与玩家社区共识：TapTap官方论坛、B站新人大讲堂、九游/3DM/4399攻略、EVE手游官网及玩家攻略。因游戏持续更新，具体数值与活动请以游戏内为准，本页核验于2026年10月26日。</p>
+
+</main>
+</div>
+
+<!-- ===== 页脚 ===== -->
+<div class="footer-legal">
+  本页面为维基百科风格演示页，内容由豆包根据公开攻略资料整理，仅供学习参考，不代表官方立场。具体游戏内容以《星战前夜：无烬星河》游戏内实际为准。
+</div>
+
+<script>
+function toast(msg){
+  var t=document.getElementById('toast');
+  if(!t){t=document.createElement('div');t.id='toast';t.style.cssText='position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#202122;color:#fff;padding:10px 18px;border-radius:6px;font-size:14px;z-index:999;opacity:0;transition:opacity .3s';document.body.appendChild(t);}
+  t.textContent=msg;t.style.opacity='1';
+  clearTimeout(t._t);t._t=setTimeout(function(){t.style.opacity='0';},2200);
+}
+</script>
+</body>
+</html>
