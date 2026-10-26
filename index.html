@@ -536,23 +536,29 @@ function toast(msg){
     if(tgt){setTimeout(function(){tgt.scrollIntoView({behavior:'smooth',block:'start'});history.replaceState(null,'','#'+id);},20);}
   }
   function highlight(id,q){
-    var scope=document.getElementById(id);if(!scope)return;
-    var walker=document.createTreeWalker(scope,NodeFilter.SHOW_TEXT,null);
-    var nodes=[];while(walker.nextNode())nodes.push(walker.currentNode);
+    var head=document.getElementById(id);if(!head)return;
+    var scopeEls=[head],n=head.nextElementSibling;
+    while(n&&!/^H[1-6]$/.test(n.tagName)&&!(n.tagName==='DIV'&&((' '+n.className+' ').indexOf(' stage-timeline ')>-1||(' '+n.className+' ').indexOf(' toc ')>-1))){
+      scopeEls.push(n);n=n.nextElementSibling;
+    }
     var re=new RegExp(esc(q),'ig');
-    nodes.forEach(function(node){
-      var parent=node.parentNode;
-      if(!parent||parent.tagName==='MARK'||parent.tagName==='SCRIPT'||parent.tagName==='STYLE')return;
-      if(node.nodeValue.toLowerCase().indexOf(q)<0)return;
-      var frag=document.createDocumentFragment(),last=0,val=node.nodeValue,m;
-      re.lastIndex=0;
-      while((m=re.exec(val))){
-        if(m.index>last)frag.appendChild(document.createTextNode(val.slice(last,m.index)));
-        var mk=document.createElement('mark');mk.className='hl';mk.textContent=m[0];frag.appendChild(mk);
-        last=m.index+m[0].length;
-      }
-      if(last<val.length)frag.appendChild(document.createTextNode(val.slice(last)));
-      parent.replaceChild(frag,node);
+    scopeEls.forEach(function(scope){
+      var walker=document.createTreeWalker(scope,NodeFilter.SHOW_TEXT,null);
+      var nodes=[];while(walker.nextNode())nodes.push(walker.currentNode);
+      nodes.forEach(function(node){
+        var parent=node.parentNode;
+        if(!parent||parent.tagName==='MARK'||parent.tagName==='SCRIPT'||parent.tagName==='STYLE')return;
+        if(node.nodeValue.toLowerCase().indexOf(q)<0)return;
+        var frag=document.createDocumentFragment(),last=0,val=node.nodeValue,m;
+        re.lastIndex=0;
+        while((m=re.exec(val))){
+          if(m.index>last)frag.appendChild(document.createTextNode(val.slice(last,m.index)));
+          var mk=document.createElement('mark');mk.className='hl';mk.textContent=m[0];frag.appendChild(mk);
+          last=m.index+m[0].length;
+        }
+        if(last<val.length)frag.appendChild(document.createTextNode(val.slice(last)));
+        parent.replaceChild(frag,node);
+      });
     });
   }
   function removeMarks(){$$('mark.hl').forEach(function(m){var t=document.createTextNode(m.textContent);m.parentNode.replaceChild(t,m);});}
