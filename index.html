@@ -105,6 +105,33 @@
     table.wikitable{font-size:13px}
     table.wikitable th,table.wikitable td{padding:4px 6px}
   }
+
+  /* ===== 交互增强 ===== */
+  html{scroll-behavior:smooth}
+  h1[id],h2[id],h3[id]{scroll-margin-top:96px}
+  .progress-bar{position:fixed;top:0;left:0;height:3px;width:0;background:linear-gradient(90deg,#0645ad,#14866d);z-index:998;transition:width .1s linear}
+  #toTop{position:fixed;right:22px;bottom:26px;width:46px;height:46px;border-radius:50%;background:#0645ad;color:#fff;font-size:22px;border:none;cursor:pointer;box-shadow:0 3px 10px rgba(0,0,0,.28);opacity:0;visibility:hidden;transform:translateY(12px);transition:opacity .25s,transform .25s,visibility .25s;z-index:990;display:flex;align-items:center;justify-content:center;line-height:1}
+  #toTop:hover{background:#0b0080}
+  #toTop.show{opacity:1;visibility:visible;transform:translateY(0)}
+  .toc a.active,.sidebar a.active{color:var(--text);font-weight:700}
+  .toc a.active{display:block;padding:1px 3px;border-radius:2px;background:#eaf3ff}
+  .sidebar a.active{border-left:3px solid #0645ad;padding-left:3px;background:#eaf3ff}
+  mark.hl{background:#ffe97a;border-radius:2px;padding:0 1px}
+  .search{position:relative}
+  .search-results{position:absolute;top:calc(100% + 8px);right:0;width:360px;max-height:340px;overflow:auto;background:#fff;border:1px solid var(--border);box-shadow:0 8px 24px rgba(0,0,0,.16);z-index:995;border-radius:4px;display:none}
+  .search-results.show{display:block}
+  .search-results .sr-item{padding:9px 13px;cursor:pointer;border-bottom:1px solid #eaecf0;font-size:14px}
+  .search-results .sr-item:last-child{border-bottom:none}
+  .search-results .sr-item:hover,.search-results .sr-item.sel{background:#eaf3ff}
+  .search-results .sr-item b.t{color:var(--link);font-weight:700;display:block}
+  .search-results .sr-item .s{color:var(--muted);font-size:12px;margin-top:2px;line-height:1.5;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+  .search-results .sr-empty{padding:12px 13px;color:var(--muted);font-size:13px;text-align:center}
+  .lightbox{position:fixed;inset:0;background:rgba(0,0,0,.88);z-index:9999;display:none;align-items:center;justify-content:center;cursor:zoom-out;padding:26px}
+  .lightbox.show{display:flex}
+  .lightbox img{max-width:94vw;max-height:90vh;object-fit:contain;border-radius:4px;box-shadow:0 12px 44px rgba(0,0,0,.55)}
+  .lightbox .lb-caption{position:fixed;bottom:16px;left:50%;transform:translateX(-50%);color:#fff;font-size:13px;background:rgba(0,0,0,.55);padding:4px 14px;border-radius:16px;max-width:80vw;text-align:center}
+  .figure img,.infobox img{cursor:zoom-in}
+  @media (max-width:900px){.search-results{width:300px}}
 </style>
 </head>
 <body>
@@ -115,8 +142,8 @@
     <span>EVE·自由百科</span>
   </div>
   <div class="search">
-    <input type="text" placeholder="搜索条目..." value="EVE无烬星河 新手指南">
-    <button onclick="document.querySelector('.toc')&&document.querySelector('.toc').scrollIntoView({behavior:'smooth'});return false;">搜索</button>
+    <input id="searchInput" type="text" placeholder="搜索条目（章节/关键词）" autocomplete="off" aria-label="站内搜索">
+    <button id="searchBtn" type="button">搜索</button>
   </div>
 </div>
 
@@ -411,6 +438,168 @@ function toast(msg){
   t.textContent=msg;t.style.opacity='1';
   clearTimeout(t._t);t._t=setTimeout(function(){t.style.opacity='0';},2200);
 }
+(function(){
+  'use strict';
+  function $(s,c){return (c||document).querySelector(s);}
+  function $$(s,c){return Array.prototype.slice.call((c||document).querySelectorAll(s));}
+
+  /* 1. 阅读进度条 */
+  var bar=$('#progressBar');
+  if(!bar){bar=document.createElement('div');bar.id='progressBar';bar.className='progress-bar';document.body.appendChild(bar);}
+  var toTopEl=$('#toTop');
+  if(!toTopEl){toTopEl=document.createElement('button');toTopEl.id='toTop';toTopEl.title='回到顶部';toTopEl.setAttribute('aria-label','回到顶部');toTopEl.textContent='↑';document.body.appendChild(toTopEl);}
+  toTopEl.addEventListener('click',function(){window.scrollTo({top:0,behavior:'smooth'});});
+
+  /* 2. 目录 / 侧边栏滚动跟随高亮 */
+  var headings=$$('h1[id],h2[id],h3[id]');
+  var tocLinks={},sbLinks={};
+  $$('.toc a').forEach(function(a){var h=a.getAttribute('href');if(h&&h.charAt(0)==='#')tocLinks[h.slice(1)]=a;});
+  $$('.sidebar a').forEach(function(a){var h=a.getAttribute('href');if(h&&h.charAt(0)==='#')sbLinks[h.slice(1)]=a;});
+  function setActive(id){
+    $$('.toc a.active,.sidebar a.active').forEach(function(a){a.classList.remove('active');});
+    if(tocLinks[id])tocLinks[id].classList.add('active');
+    if(sbLinks[id])sbLinks[id].classList.add('active');
+  }
+  var currentId='';
+  function updateTocActive(){
+    var best='',bestTop=-Infinity;
+    headings.forEach(function(h){
+      var r=h.getBoundingClientRect().top;
+      if(r<=110&&r>bestTop){bestTop=r;best=h.id;}
+    });
+    if(!best){var v=$('.main h1[id]');if(v)best=v.id;}
+    if(best&&best!==currentId){currentId=best;setActive(best);}
+  }
+
+  /* 3. 目录/侧边栏平滑滚动 */
+  function bindSmooth(container){
+    if(!container)return;
+    $$('a[href^="#"]',container).forEach(function(a){
+      a.addEventListener('click',function(e){
+        var tgt=document.getElementById(a.getAttribute('href').slice(1));
+        if(tgt){e.preventDefault();tgt.scrollIntoView({behavior:'smooth',block:'start'});history.replaceState(null,'','#'+a.getAttribute('href').slice(1));}
+      });
+    });
+  }
+  bindSmooth($('.toc'));
+  bindSmooth($('.sidebar'));
+
+  /* 4. 站内搜索 */
+  var main=$('.main'),idx=[];
+  if(main){
+    $$('h1[id],h2[id],h3[id]',main).forEach(function(h){
+      var parts=[],n=h.nextElementSibling;
+      while(n&&!/^H[1-6]$/.test(n.tagName)&&!(n.tagName==='DIV'&&((' '+n.className+' ').indexOf(' stage-timeline ')>-1||(' '+n.className+' ').indexOf(' toc ')>-1))){
+        parts.push(n.innerText||n.textContent||'');
+        n=n.nextElementSibling;
+      }
+      idx.push({id:h.id,title:h.textContent.replace(/\s+/g,' ').trim(),text:parts.join('\n').replace(/\s+/g,' ')});
+    });
+  }
+  var inp=$('#searchInput'),btn=$('#searchBtn'),wrap=$('.search');
+  var resBox=document.createElement('div');resBox.className='search-results';
+  if(wrap)wrap.appendChild(resBox);
+  function esc(s){return s.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');}
+  function runSearch(q){
+    q=(q||'').trim().toLowerCase();
+    if(!q){resBox.innerHTML='';resBox.classList.remove('show');return;}
+    var hits=[];
+    idx.forEach(function(it){
+      var tl=it.title.toLowerCase();
+      if(tl.indexOf(q)>-1){hits.push({it:it,score:100});return;}
+      if(it.text.toLowerCase().indexOf(q)>-1)hits.push({it:it,score:10});
+    });
+    hits.sort(function(a,b){return b.score-a.score;});
+    hits=hits.slice(0,8);
+    if(hits.length===0){
+      resBox.innerHTML='<div class="sr-empty">未找到与「'+q+'」相关的内容</div>';
+    }else{
+      resBox.innerHTML=hits.map(function(h){
+        var it=h.it,p=it.text.toLowerCase().indexOf(q),start,end;
+        if(p<0)p=0;
+        start=Math.max(0,p-18);end=Math.min(it.text.length,p+q.length+36);
+        var snip=it.text.slice(start,end);
+        return '<div class="sr-item" data-id="'+it.id+'"><b class="t">'+it.title+'</b><div class="s">'+snip+'</div></div>';
+      }).join('');
+      $$('.sr-item',resBox).forEach(function(el){
+        el.addEventListener('click',function(){goTo(el.getAttribute('data-id'),q);});
+      });
+    }
+    resBox.classList.add('show');
+  }
+  function goTo(id,q){
+    removeMarks();
+    if(q)highlight(id,q);
+    var tgt=document.getElementById(id);
+    resBox.classList.remove('show');
+    if(inp)inp.blur();
+    if(tgt){setTimeout(function(){tgt.scrollIntoView({behavior:'smooth',block:'start'});history.replaceState(null,'','#'+id);},20);}
+  }
+  function highlight(id,q){
+    var scope=document.getElementById(id);if(!scope)return;
+    var walker=document.createTreeWalker(scope,NodeFilter.SHOW_TEXT,null);
+    var nodes=[];while(walker.nextNode())nodes.push(walker.currentNode);
+    var re=new RegExp(esc(q),'ig');
+    nodes.forEach(function(node){
+      var parent=node.parentNode;
+      if(!parent||parent.tagName==='MARK'||parent.tagName==='SCRIPT'||parent.tagName==='STYLE')return;
+      if(node.nodeValue.toLowerCase().indexOf(q)<0)return;
+      var frag=document.createDocumentFragment(),last=0,val=node.nodeValue,m;
+      re.lastIndex=0;
+      while((m=re.exec(val))){
+        if(m.index>last)frag.appendChild(document.createTextNode(val.slice(last,m.index)));
+        var mk=document.createElement('mark');mk.className='hl';mk.textContent=m[0];frag.appendChild(mk);
+        last=m.index+m[0].length;
+      }
+      if(last<val.length)frag.appendChild(document.createTextNode(val.slice(last)));
+      parent.replaceChild(frag,node);
+    });
+  }
+  function removeMarks(){$$('mark.hl').forEach(function(m){var t=document.createTextNode(m.textContent);m.parentNode.replaceChild(t,m);});}
+  if(btn)btn.addEventListener('click',function(){runSearch(inp.value);});
+  if(inp){
+    inp.addEventListener('input',function(){runSearch(inp.value);});
+    inp.addEventListener('keydown',function(e){
+      if(e.key==='Enter')runSearch(inp.value);
+      if(e.key==='Escape'){resBox.classList.remove('show');inp.blur();}
+    });
+    document.addEventListener('click',function(e){if(resBox&&!wrap.contains(e.target))resBox.classList.remove('show');});
+  }
+
+  /* 5. 图片灯箱 */
+  var lb=null;
+  function closeLb(){if(lb){lb.classList.remove('show');document.body.style.overflow='';}}
+  function openLb(img){
+    if(!lb){
+      lb=document.createElement('div');lb.className='lightbox';
+      lb.addEventListener('click',closeLb);
+      document.addEventListener('keydown',function(e){if(e.key==='Escape')closeLb();});
+      document.body.appendChild(lb);
+    }
+    lb.innerHTML='';
+    var im=document.createElement('img');im.src=img.currentSrc||img.src;im.alt=img.alt||'';
+    lb.appendChild(im);
+    var cap=img.alt||'';if(cap){var c=document.createElement('div');c.className='lb-caption';c.textContent=cap;lb.appendChild(c);}
+    lb.classList.add('show');
+    document.body.style.overflow='hidden';
+  }
+  $$('.figure img,.infobox img').forEach(function(img){
+    img.addEventListener('click',function(e){e.stopPropagation();openLb(img);});
+  });
+
+  /* 初始化 */
+  onScrollInit();
+  window.addEventListener('scroll',onScrollInit,{passive:true});
+  window.addEventListener('resize',onScrollInit);
+  function onScrollInit(){
+    var st=document.documentElement.scrollTop||document.body.scrollTop;
+    var h=document.documentElement.scrollHeight-window.innerHeight;
+    var p=h>0?Math.min(100,st/h*100):0;
+    bar.style.width=p+'%';
+    toTopEl.classList.toggle('show',st>320);
+    updateTocActive();
+  }
+})();
 </script>
 </body>
 </html>
